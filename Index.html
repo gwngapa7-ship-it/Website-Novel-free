@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Ratu Terkutuk</title>
+  <style>
+    body { margin: 0; font-family: Arial, sans-serif; background: #f4f4f4; }
+    #container { display: flex; height: 100vh; }
+    #sidebar {
+      width: 220px;
+      background: #222;
+      color: #fff;
+      padding: 20px 0;
+      box-sizing: border-box;
+    }
+    #sidebar h2 { text-align: center; margin-bottom: 20px; }
+    #sidebar ul { list-style: none; padding: 0; }
+    #sidebar li {
+      padding: 12px 24px;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+    #sidebar li:hover, #sidebar li.active {
+      background: #444;
+    }
+    #content {
+      flex: 1;
+      padding: 40px 0;
+      background: #fff;
+      overflow-y: auto;
+      box-sizing: border-box;
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+    }
+    #novel-reader {
+      max-width: 600px;
+      width: 100%;
+      padding: 0 32px;
+    }
+    #chapter-title {
+      margin-top: 0;
+      font-family: Georgia, 'Times New Roman', Times, serif;
+      font-size: 2em;
+      text-align: center;
+      margin-bottom: 32px;
+    }
+    #cover-image {
+      max-width: 100%;
+      margin: 20px auto 32px auto;
+      border-radius: 8px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+      display: block;
+    }
+    #chapter-content {
+      font-family: Georgia, 'Times New Roman', Times, serif;
+      font-size: 1.2em;
+      line-height: 1.8;
+      text-align: justify;
+      color: #222;
+    }
+    #chapter-content p {
+      text-indent: 2em;
+      margin: 0 0 1.2em 0;
+    }
+    #novel-title {
+      font-family: Georgia, 'Times New Roman', Times, serif;
+      font-size: 2.2em;
+      text-align: center;
+      margin: 24px 0 0 0;
+      color: #333;
+      letter-spacing: 2px;
+    }
+    #back-home {
+      display: none;
+      margin-bottom: 24px;
+      background: #eee;
+      border: none;
+      padding: 8px 18px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 1em;
+    }
+    #back-home:hover {
+      background: #ddd;
+    }
+  </style>
+</head>
+<body>
+  <div id="container">
+    <div id="sidebar">
+      <h2>Daftar Bab</h2>
+      <ul id="chapter-list"></ul>
+    </div>
+    <div id="content">
+      <div id="novel-reader">
+        <div id="novel-title">Ratu Terkutuk</div>
+        <img id="cover-image" src="Ratu Terkutuk_ Kejayaan Sang Ratu.png" alt="Cover Novel" />
+        <button id="back-home" onclick="showHome()">Kembali ke Beranda</button>
+        <h2 id="chapter-title">Pilih Bab</h2>
+        <div id="chapter-content">Klik salah satu bab di kiri untuk mulai membaca.</div>
+      </div>
+    </div>
+  </div>
+  <script>
+    // Data novel
+    const chapters = [
+      {
+        title: "Bab 1: Akhir dari Kehidupan, Awal dari Kutukan",
+        content: `Langit pagi itu berwarna keperakan, mendung tipis menutupi matahari yang baru naik.
+
+Akira Onimika, seorang siswi SMA kelas dua, berlari kecil sambil menenteng buku catatan fisika di tangannya. Dia tahu ia sudah terlambat untuk ujian pagi ini, dan rasa panik membuat langkahnya semakin terburu.
+
+“Kalau aku gagal lagi... habis aku sama sensei,” gumamnya, sambil mencoba mengatur napas.
+
+Akira bukanlah gadis istimewa. Nilainya pas-pasan, temannya sedikit, dan hidupnya biasa-biasa saja. Namun, di balik wajahnya yang ceria, ia sering merasa dunia modern ini terlalu... hampa. Seolah-olah ada sesuatu yang hilang dari dirinya—sesuatu yang tak pernah bisa ia mengerti.
+
+Sampai akhirnya, suara klakson keras membuyarkan pikirannya.
+
+Sebuah cahaya putih menyilaukan dari arah kanan.
+
+BRAK!!!
+
+Tubuh Akira terpental. Suara orang-orang berteriak, dunia berputar, lalu semuanya berubah menjadi hening.
+
+Ia merasakan tubuhnya semakin dingin, dan penglihatannya buram.
+
+Dalam kesadarannya yang perlahan memudar, ia mendengar bisikan samar:
+
+"Kau tak seharusnya mati di sini... Kau adalah penerus yang telah lama kutunggu."
+
+Bayangan hitam menyelubunginya, membawa rasa hangat sekaligus mencekam.
+
+Di detik terakhir napasnya, air mata jatuh dari sudut matanya.
+
+“Jadi... ini akhirku?”
+
+Gelap.
+
+Namun, dari kegelapan itu... sebuah mata berwarna merah menyala perlahan terbuka.`
+      }
+      // Bab berikutnya bisa ditambah di sini
+    ];
+
+    const chapterList = document.getElementById('chapter-list');
+    const coverImage = document.getElementById('cover-image');
+    const backHomeBtn = document.getElementById('back-home');
+    const chapterTitle = document.getElementById('chapter-title');
+    const chapterContent = document.getElementById('chapter-content');
+    const novelTitle = document.getElementById('novel-title');
+
+    // Tampilkan daftar bab
+    chapters.forEach((chapter, idx) => {
+      const li = document.createElement('li');
+      li.textContent = chapter.title;
+      li.onclick = () => showChapter(idx);
+      chapterList.appendChild(li);
+    });
+
+    function showChapter(idx) {
+      chapterTitle.textContent = chapters[idx].title;
+      // Ubah paragraf menjadi <p>
+      const paragraphs = chapters[idx].content.split(/\n\s*\n/).map(p => `<p>${p.trim()}</p>`).join('');
+      chapterContent.innerHTML = paragraphs;
+      coverImage.style.display = 'none';
+      backHomeBtn.style.display = 'inline-block';
+      // Highlight bab aktif
+      Array.from(chapterList.children).forEach((li, i) => {
+        li.className = (i === idx) ? 'active' : '';
+      });
+    }
+
+    function showHome() {
+      chapterTitle.textContent = "Pilih Bab";
+      chapterContent.innerHTML = "Klik salah satu bab di kiri untuk mulai membaca.";
+      coverImage.style.display = 'block';
+      backHomeBtn.style.display = 'none';
+      Array.from(chapterList.children).forEach(li => li.className = '');
+    }
+  </script>
+</body>
+</html>
